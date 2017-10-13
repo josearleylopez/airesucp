@@ -1,0 +1,39 @@
+<div class="app flex-row align-items-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <form (ngSubmit)="onLogin(loginForma)" #loginForma="ngForm" novalidate="">
+          <div class="card">
+            <div>
+                <img src="/assets/images/logo.png" class="rounded mx-auto d-block" alt="...">
+              </div>
+              <!-- <img class="card-img-top img-fluid" src="/assets/images/logo.png" alt="Aires Colombianos">               -->
+            <div class="card-block">
+              <p class="text-muted"><small>Ingresa a tu cuenta!</small></p>
+              <div class="input-group mb-2">
+                <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+                <input type="text" name="email" class="form-control" [(ngModel)]="usuario.email" placeholder="Email" required>
+                <!-- <div *ngIf="email.errors?.required">
+                  Este campo es requerido
+                </div> -->
+              </div>
+              <div class="input-group mb-4">
+                <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span>
+                <input type="password" name="password" class="form-control" [(ngModel)]="usuario.password" placeholder="Contraseña" required>
+              </div>
+              <p *ngIf="errorMensaje" class="alert alert-danger" role="alert"><small>{{errorMensaje}}</small></p>
+              <div class="row">
+                <div class="col-6">
+                  <button type="submit" class="btn btn-primary">Entrar</button>
+                </div>
+                <div class="col-6 text-right">
+                  <button type="button" class="btn btn-link px-0">Olvidó su contraseña?</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

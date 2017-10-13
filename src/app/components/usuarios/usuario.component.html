@@ -1,0 +1,154 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <form [formGroup]="forma" (ngSubmit)="guardarFormulario()" class="form-horizontal" novalidate="novalidate">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-md-10">
+              <strong>Usuario </strong>{{usuario.nombres + ' ' + usuario.apellidos}}
+            </div>
+            <div class="col-md-2 d-flex justify-content-end">
+              <div class="btn-group">
+                <button [routerLink]="['/usuarios']" class="btn btn-secondary"><i class="fa fa-reply" aria-hidden="true"></i></button>
+                <button (click)="agregarNuevo(forma)" type="button" class="btn btn-secondary"><i class="fa fa-file-o" aria-hidden="true"></i></button>
+                <button [disabled]="!forma.valid" type="submit" class="btn btn-secondary"><i [ngClass]="{'fa-save':!loading, 'fa-refresh fa-spin':loading}" class="fa" aria-hidden="true"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-block">
+            <div class="form-group row" [ngClass]="{'has-danger': !forma.get('email').valid && forma.get('email').touched }">
+              <label class="col-md-2 form-control-label" for="email">Email</label>
+              <div class="col-md-8">
+                <input [(ngModel)]="usuario.email"
+                      formControlName="email"
+                      type="text"
+                      class="form-control"
+                      placeholder="Email usuario"
+                      [readonly]="actualizar">
+                <div *ngIf="forma.controls['email'].errors?.pattern"
+                class="form-control-feedback">
+                  Correo no válido
+                </div>
+              </div>
+            </div>
+            <div class="form-group row" [ngClass]="{'has-danger': !forma.get('identificacion').valid && forma.get('identificacion').touched }">
+              <label class="col-md-2 form-control-label" for="identificacion">Identificacion</label>
+              <div class="col-md-8">
+                <input [(ngModel)]="usuario.identificacion"
+                type="text"
+                formControlName="identificacion"
+                class="form-control"
+                placeholder="Identificacion"
+                [readonly]="actualizar">
+                <div *ngIf="forma.controls['identificacion'].errors?.pattern"
+                class="form-control-feedback">
+                  Identificacion no válida
+                </div>
+              </div>
+            </div>
+            <div class="form-group row" [ngClass]="{'has-danger': !forma.get('nombres').valid && forma.get('nombres').touched }">
+              <label class="col-md-2 form-control-label" for="nombres">Nombres</label>
+              <div class="col-md-8">
+                <input [(ngModel)]="usuario.nombres"
+                type="text"
+                formControlName="nombres"
+                class="form-control"
+                placeholder="Nombres usuario"
+                required>
+                <div *ngIf="(forma.controls['nombres'].errors?.required && forma.get('nombres').touched)"
+                class="form-control-feedback">
+                  Los nombres son requeridos
+                </div>
+                <div *ngIf="forma.controls['nombres'].errors?.minlength"
+                class="form-control-feedback">
+                  Por lo menos 3 caracteres
+                </div>
+              </div>
+            </div>
+            <div class="form-group row" [ngClass]="{'has-danger': !forma.get('apellidos').valid && forma.get('apellidos').touched }">
+              <label class="col-md-2 form-control-label" for="apellidos">Apellidos</label>
+              <div class="col-md-8">
+                <input [(ngModel)]="usuario.apellidos"
+                type="text"
+                formControlName="apellidos"
+                class="form-control"
+                placeholder="Apellidos usuario"
+                required>
+                <div *ngIf="(forma.controls['apellidos'].errors?.required && forma.get('apellidos').touched)"
+                class="form-control-feedback">
+                  Los apellidos son requeridos
+                </div>
+                <div *ngIf="forma.controls['apellidos'].errors?.minlength"
+                class="form-control-feedback">
+                  Por lo menos 3 caracteres
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 form-control-label" for="direccion">Direccion</label>
+              <div class="col-md-8">
+                <input [(ngModel)]="usuario.direccion"
+                type="text"
+                formControlName="direccion"
+                class="form-control"
+                placeholder="Direccion"
+                required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 form-control-label" for="direccion">Telefono</label>
+              <div class="col-md-8">
+                <input [(ngModel)]="usuario.celular"
+                type="text"
+                formControlName="celular"
+                class="form-control"
+                placeholder="Telefono"
+                required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 form-control-label" for="idRol">Perfil</label>
+              <div class="col-md-8">
+                <select [(ngModel)]="usuario.idRol"
+                  class="form-control" formControlName="idRol">
+                  <option value="0">Usuario</option>
+                  <option value="1">Administrador</option>
+                </select>
+              </div>
+            </div>
+            <div *ngIf="!actualizar"class="form-group row">
+              <label class="col-2 col-form-label">Contraseña</label>
+              <div class="col-md-8">
+                <input [(ngModel)]="usuario.clave"
+                       class="form-control"
+                       type="password"
+                       placeholder="Password"
+                       formControlName="clave">
+              </div>
+            </div>
+            <div *ngIf="!actualizar" class="form-group row" [ngClass]="{'has-danger': !forma.get('password2').valid && forma.get('password2').touched }">
+              <label class="col-2 col-form-label">Repetir</label>
+              <div class="col-md-8">
+                <input class="form-control"
+                       type="password"
+                       placeholder="Repetir contraseña"
+                       formControlName="password2">
+              <div *ngIf="(!forma.get('password2').valid && forma.get('password2').touched)"
+               class="form-control-feedback">
+                 Las constraseñas no coinciden
+               </div>
+              </div>
+            </div>
+        </div>
+        <div class="card-footer">
+          {{forma.valid}}
+          <br>
+          {{forma.status}}
+        </div>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
