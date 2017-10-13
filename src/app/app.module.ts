@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { Ng2CompleterModule } from "ng2-completer";
+import { MyDatePickerModule } from 'mydatepicker';
 
 
 //Rutas
@@ -43,6 +44,7 @@ import { BuscarVuelosComponent } from './components/buscar-vuelos/buscar-vuelos.
     ReactiveFormsModule,
     HttpModule,
     Ng2CompleterModule,
+    MyDatePickerModule,
     APP_ROUTING
   ],
   providers: [

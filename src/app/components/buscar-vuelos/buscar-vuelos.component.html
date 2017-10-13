@@ -1,65 +1,124 @@
 <div class="animated fadeIn">
   <div class="row">
     <div class="col-sm-12">
+      <form [formGroup]="forma" (ngSubmit)="buscarVuelos()" class="form-horizontal" novalidate="novalidate">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa fa-plane" aria-hidden="true"></i>
+            <strong>Buscar Vuelos</strong>
+          </div>
+          <div class="card-block">
+            <!-- <div class="form-group row">
+              <div class="col-md-6">
+                <label class="radio-inline" for="inline-radio1">
+                  <input type="radio" id="idaVuelta" name="tipoVuelo" value="1"> Ida y Vuelta
+                </label>
+                <label class="radio-inline" for="inline-radio2">
+                  <input type="radio" id="ida" name="tipoVuelo" value="0" checked> Solo ida
+                </label>
+              </div>
+            </div> -->
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group" [ngClass]="{'has-danger': !forma.get('ciudadOrigen').valid && forma.get('ciudadOrigen').touched }">
+                  <label for="name">Origen</label>
+                  <ng2-completer inputClass="form-control" formControlName="ciudadOrigen" [datasource]="dataService" [minSearchLength]="0" textNoResults="Sin Resultados" clearUnselected="true">
+                  </ng2-completer>
+                  <div *ngIf="!forma.get('ciudadOrigen').valid && forma.get('ciudadOrigen').touched" class="form-control-feedback"><small>Seleccione ciudad</small></div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group" [ngClass]="{'has-danger': !forma.get('ciudadDestino').valid && forma.get('ciudadDestino').touched }">
+                  <label for="name">Destino</label>
+                  <ng2-completer inputClass="form-control" formControlName="ciudadDestino" [datasource]="dataService" [minSearchLength]="0" textNoResults="Sin Resultados" clearUnselected="true">
+                  </ng2-completer>
+                  <div *ngIf="!forma.get('ciudadDestino').valid && forma.get('ciudadDestino').touched" class="form-control-feedback"><small>Seleccione ciudad</small></div>
+                </div>
+              </div>
+            </div>
+            <!--/.row-->
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group" [ngClass]="{'has-danger': !forma.get('fechaSalida').valid && forma.get('fechaSalida').touched }">
+                  <label for="fechaSalida">Ida</label>
+                  <my-date-picker name="fechaSalida" [options]="myDatePickerOptions" formControlName="fechaSalida">
+                  </my-date-picker>
+                  <div *ngIf="!forma.get('fechaSalida').valid && forma.get('fechaSalida').touched" class="form-control-feedback"><small>Fecha no valida</small></div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group" [ngClass]="{'has-danger': !forma.get('fechaRegreso').valid && forma.get('fechaRegreso').touched }">
+                  <label for="fechaSalida">Regreso</label>
+                  <my-date-picker name="fechaRegreso" [options]="myDatePickerOptions" formControlName="fechaRegreso">
+                  </my-date-picker>
+                  <div *ngIf="!forma.get('fechaRegreso').valid && forma.get('fechaRegreso').touched" class="form-control-feedback"><small>Fecha no valida</small></div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group" [ngClass]="{'has-danger': !forma.get('cantSillas').valid && forma.get('cantSillas').touched }">
+                  <label for="cantSillas">Pasajeros</label>
+                  <input type="number" min="1" class="form-control" formControlName="cantSillas">
+                  <div *ngIf="!forma.get('cantSillas').valid && forma.get('cantSillas').touched" class="form-control-feedback"><small>Valor no valido</small></div>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-end">
+              <div class="col-md-3 d-flex justify-content-end">
+                <button [disabled]="!forma.valid" type="submit" class="btn btn-primary">
+                <i [ngClass]="{'fa-search':!loading,'fa-refresh fa-spin':loading}" class="fa"></i>
+                <span *ngIf="!loading">Buscar Vuelos</span>
+                <span *ngIf="loading">Buscando....</span>
+              </button>
+              </div>
+            </div>
+            <!--/.row-->
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-12">
       <div class="card">
         <div class="card-header">
           <i class="fa fa-plane" aria-hidden="true"></i>
-          <strong>Buscar Vuelos</strong>
+          <strong>Vuelos Encontrados</strong>
         </div>
         <div class="card-block">
-          <div class="form-group row">
-              <div class="col-md-6">
-                <label class="radio-inline" for="inline-radio1">
-                  <input type="radio" id="inline-radio1" name="inline-radios" value="option1"> Ida y Vuelta
-                </label>
-                <label class="radio-inline" for="inline-radio2">
-                  <input type="radio" id="inline-radio2" name="inline-radios" value="option2"> Solo ida
-                </label>
-              </div>
-            </div>
           <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label for="name">Origen</label>
-                <input type="text" class="form-control" id="name" placeholder="Ciudad Origen">
+            <div class="col-md-5">
+              <div class="card">
+                <div class="card-header">
+                  <strong>Ida</strong>
+                </div>
+                <div class="card-block">
+                  <div *ngFor="let vuelo of vuelosIda" class="card-text row">
+                    <div class="col-sm-11 card card-outline-secondary">
+                      <small><strong>Fecha: </strong>{{vuelo.fecha}}</small>
+                      <small><strong>Hora: </strong>{{vuelo.hora}}</small>
+                      <small><strong>Origen: </strong>{{vuelo.ciudadOrigen}}</small>
+                      <small><strong>Destino: </strong>{{vuelo.ciudadDestino}}</small>
+                    </div>
+                    <div class="col-sm-1 card card-outline-secondary d-flex justify-content-around">
+                      <label class="custom-control custom-radio">
+                        <input name="radio" type="radio" class="custom-control-input">
+                        <span class="custom-control-indicator"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label for="name">Destino</label>
-                <input type="text" class="form-control" id="name" placeholder="Ciudad Destino">
-              </div>
-            </div>
-          </div>
-          <!--/.row-->
-          <div class="row">
-            <div class="col-sm-4">
-              <div class="form-group">
-                <label for="ccnumber">Ida</label>
-                <input type="date" class="form-control">
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="form-group">
-                <label for="ccnumber">Regreso</label>
-                <input type="date" class="form-control">
-              </div>
-            </div>
-            <div class="col-sm-4">
-              <div class="form-group">
-                <label for="ccnumber">Pasajeros</label>
-                <input type="number" class="form-control">
+            <div class="col-md-2">
+              <div class="card-text">
+                <button class="btn btn-primary" type="button" name="button">Reservar Ahora</button>
               </div>
             </div>
           </div>
-          <div class="row justify-content-end">
-            <div class="col-md-3 d-flex justify-content-end">
-              <button type="submit" class="btn btn-primary" name="button">Buscar Vuelos</button>
-            </div>
-          </div>
-          <!--/.row-->
         </div>
       </div>
     </div>
+
   </div>
 </div>

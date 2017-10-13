@@ -3,8 +3,7 @@ import { CompleterService, CompleterData } from 'ng2-completer';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { VuelosService} from '../../services/vuelos.service';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/Rx';
+import {IMyDpOptions} from 'mydatepicker';
 
 @Component({
   selector: 'app-vuelo',
@@ -12,6 +11,13 @@ import 'rxjs/Rx';
   styles: []
 })
 export class VueloComponent implements OnInit {
+  public myDatePickerOptions: IMyDpOptions = {
+        dateFormat: 'dd/mm/yyyy',
+        showClearDateBtn: true,
+        dayLabels:{su: 'Dom', mo: 'Lun', tu: 'Mar', we: 'Mie', th: 'Jue', fr: 'Vie', sa: 'Sab'},
+        monthLabels:{ 1: 'Ene', 2: 'Feb', 3: 'Mar', 4: 'Abr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Ago', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dic' },
+        todayBtnTxt:'Hoy'
+    };
   loading:boolean = false;
   errorMensaje;
   vuelo = {
@@ -43,10 +49,10 @@ export class VueloComponent implements OnInit {
         'idVuelo': new FormControl(''),
         'ciudadOrigen': new FormControl('',[Validators.required]),
         'ciudadDestino': new FormControl('', [Validators.required]),
-        'fecha': new FormControl('', [Validators.required]),
-        'hora': new FormControl('', [Validators.required]),
-        'tiempoEstimado': new FormControl('', [Validators.required]),
-        'cantSillas': new FormControl('', [Validators.required]),
+        'fecha': new FormControl(null, [Validators.required]),
+        'hora': new FormControl('', [Validators.required,Validators.pattern("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")]),
+        'tiempoEstimado': new FormControl('', [Validators.required, Validators.pattern("^[1-9]{1}[0-9]*$")]),
+        'cantSillas': new FormControl('', [Validators.required,Validators.pattern("^[1-9]{1}[0-9]*$")]),
         'estado': new FormControl('')
       });
 
@@ -135,4 +141,19 @@ export class VueloComponent implements OnInit {
         error => console.error(error));
     }
   }
+
+  setDate(): void {
+        // Set today date using the patchValue function
+        let date = new Date();
+        this.forma.patchValue({fecha: {
+        date: {
+            year: date.getFullYear(),
+            month: date.getMonth() + 1,
+            day: date.getDate()}
+        }});
+    }
+  clearDate(): void {
+        // Clear the date using the patchValue function
+        this.forma.patchValue({myDate: null});
+    }
 }
