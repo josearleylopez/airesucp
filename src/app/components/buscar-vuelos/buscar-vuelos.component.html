@@ -93,14 +93,14 @@
                   <strong>Ida</strong>
                 </div>
                 <div class="card-block">
-                  <div *ngFor="let vuelo of vuelosIda" class="card-text row">
-                    <div class="col-sm-11 card card-outline-secondary">
+                  <div *ngFor="let vuelo of vuelosIda" class="list-group-item row">
+                    <div class="col-sm-11">
                       <small><strong>Fecha: </strong>{{vuelo.fecha}}</small>
                       <small><strong>Hora: </strong>{{vuelo.hora}}</small>
                       <small><strong>Origen: </strong>{{vuelo.ciudadOrigen}}</small>
                       <small><strong>Destino: </strong>{{vuelo.ciudadDestino}}</small>
                     </div>
-                    <div class="col-sm-1 card card-outline-secondary d-flex justify-content-around">
+                    <div class="col-sm-1 d-flex justify-content-start">
                       <label class="custom-control custom-radio">
                         <input name="radio" type="radio" class="custom-control-input">
                         <span class="custom-control-indicator"></span>

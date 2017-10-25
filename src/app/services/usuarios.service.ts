@@ -5,7 +5,7 @@ import 'rxjs/Rx'
 
 @Injectable()
 export class UsuariosService {
-  apiURL:string = "http://ucpaires.whelastic.net/AdminPersona/rest/mspersonadmin";
+  apiURL:string = "http://ucpaires.jl.serv.net.mx/AdminPersona/rest/mspersonadmin";
 
   constructor(private http:Http) { }
 
@@ -15,16 +15,17 @@ export class UsuariosService {
       'Content-Type':'application/json'
     });
     let url = `${ this.apiURL }/registrar`;
-
+    console.log("Objeto a enviar",body);
     return this.http.post(url,body,{headers:headers})
         .map(res=>{
-          console.log(res.json());
+          console.log("Respuesta servidor usuario",res.json());
           return res.json();
         })
   }
 
-  actualizarUsuario(usuario:Usuario){
+  actualizarUsuario(usuario:any){
     let body = JSON.stringify( usuario);
+    console.log("Objeto a enviar",body);
     let headers = new Headers({
       'Content-Type':'application/json'
     });

@@ -4,43 +4,45 @@ import 'rxjs/Rx'
 
 @Injectable()
 export class VuelosService {
-  private apiURL: string = "http://ucpaires.whelastic.net/adminvuelos/rest/msvuelosadmin";
-  private ciudades=[ {
-      idCiudad: 1,
-      nombreCiudad: "Armenia"
-   },
-      {
-      idCiudad: 2,
-      nombreCiudad: "Pereira"
-   },
-      {
-      idCiudad: 3,
-      nombreCiudad: "Manizales"
-   },
-      {
-      idCiudad: 4,
-      nombreCiudad: "Cali"
-   },
-      {
-      idCiudad: 5,
-      nombreCiudad: "Bogota¡"
-   },
-      {
-      idCiudad: 6,
-      nombreCiudad: "Medellin"
-   },
-      {
-      idCiudad: 7,
-      nombreCiudad: "Barranquilla"
-   },
-      {
-      idCiudad: 8,
-      nombreCiudad: "Cartagena"
-   },
-      {
-      idCiudad: 9,
-      nombreCiudad: "Santa Marta"
-   }];
+  private apiURL: string = "http://ucpaires.jl.serv.net.mx/adminvuelos/rest/msvuelosadmin";
+  private ciudades=[
+  //   {
+  //     idCiudad: 1,
+  //     nombreCiudad: "Armenia"
+  //  },
+  //     {
+  //     idCiudad: 2,
+  //     nombreCiudad: "Pereira"
+  //  },
+  //     {
+  //     idCiudad: 3,
+  //     nombreCiudad: "Manizales"
+  //  },
+  //     {
+  //     idCiudad: 4,
+  //     nombreCiudad: "Cali"
+  //  },
+  //     {
+  //     idCiudad: 5,
+  //     nombreCiudad: "Bogota¡"
+  //  },
+  //     {
+  //     idCiudad: 6,
+  //     nombreCiudad: "Medellin"
+  //  },
+  //     {
+  //     idCiudad: 7,
+  //     nombreCiudad: "Barranquilla"
+  //  },
+  //     {
+  //     idCiudad: 8,
+  //     nombreCiudad: "Cartagena"
+  //  },
+  //     {
+  //     idCiudad: 9,
+  //     nombreCiudad: "Santa Marta"
+  //  }
+ ];
 
   constructor(private http: Http) { }
 
@@ -53,10 +55,12 @@ export class VuelosService {
       tiempoEstimado: vuelo.tiempoEstimado,
       cantSillas: vuelo.cantSillas
     }
-    // let body = JSON.stringify(aux);
+    //let body = JSON.stringify(aux);
     // { year: this.date.getFullYear(), month: this.date.getMonth() + 1, day: this.date.getDate() - 1 }
     // "fecha"="${vuelo.fecha.getDate()}/${vuelo.fecha.getMonth() + 1}/${vuelo.fecha.getFullYear()}",
     // let body = `{"ciudadOrigen":"${vuelo.ciudadOrigen}","ciudadDestino":"${vuelo.ciudadDestino}","fecha":"${vuelo.fecha.formatted}","hora":"${vuelo.hora}","tiempoEstimado":"${vuelo.tiempoEstimado}","cantSillas":"${vuelo.cantSillas}"}`;
+
+
     let body = '{"ciudadOrigen":"'+vuelo.ciudadOrigen+'","ciudadDestino":"'+vuelo.ciudadDestino+'","fecha":"'+vuelo.fecha.formatted+'","hora":"'+vuelo.hora+'","tiempoEstimado":"'+vuelo.tiempoEstimado+'","cantSillas":"'+vuelo.cantSillas+'"}';
 
 
@@ -70,7 +74,7 @@ export class VuelosService {
     let headers = new Headers({
       'Content-Type': 'application/json'
     });
-    let url = `${this.apiURL}/registrar`;
+    let url = `${this.apiURL}/crear`;
 
     return this.http.post(url, body, { headers: headers })
       .map(res => {
@@ -80,7 +84,9 @@ export class VuelosService {
   }
 
   actualizarVuelo(vuelo: any) {
-    let body = JSON.stringify(vuelo);
+    // let body = JSON.stringify(vuelo);
+    let body = '{"idVuelo":"'+vuelo.idVuelo+'","ciudadOrigen":"'+vuelo.ciudadOrigen+'","ciudadDestino":"'+vuelo.ciudadDestino+'","fecha":"'+vuelo.fecha.formatted+'","hora":"'+vuelo.hora+'","tiempoEstimado":"'+vuelo.tiempoEstimado+'","cantSillas":"'+vuelo.cantSillas+'"}';
+    console.log("Vuelo a enviar",body);
     let headers = new Headers({
       'Content-Type': 'application/json'
     });

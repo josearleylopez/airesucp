@@ -28,7 +28,8 @@
               <tr *ngFor="let usuario of usuarios">
                 <td>{{usuario.email}}</td>
                 <td>{{usuario.nombres}} {{usuario.apellidos}}</td>
-                <td>{{usuario.idRole}}</td>
+                <td *ngIf="usuario.idRol==1">Admin</td>
+                <td *ngIf="usuario.idRol!=1">Usuario</td>
                 <td>
                   <div class="d-flex justify-content-end">
                     <div>

@@ -12,7 +12,11 @@
               <div class="btn-group">
                 <button [routerLink]="['/usuarios']" class="btn btn-secondary"><i class="fa fa-reply" aria-hidden="true"></i></button>
                 <button (click)="agregarNuevo(forma)" type="button" class="btn btn-secondary"><i class="fa fa-file-o" aria-hidden="true"></i></button>
-                <button [disabled]="!forma.valid" type="submit" class="btn btn-secondary"><i [ngClass]="{'fa-save':!loading, 'fa-refresh fa-spin':loading}" class="fa" aria-hidden="true"></i></button>
+                <button [hidden]="actualizar" [disabled]="!forma.valid" type="submit" class="btn btn-secondary"><i [ngClass]="{'fa-save':!loading, 'fa-refresh fa-spin':loading}" class="fa" aria-hidden="true"></i></button>
+                <button [hidden]="!actualizar"
+                        [disabled]="(!forma.get('nombres').valid || !forma.get('apellidos').valid || !forma.get('celular').valid || !forma.get('idRol').valid)"
+                        type="submit"
+                        class="btn btn-secondary"><i [ngClass]="{'fa-save':!loading, 'fa-refresh fa-spin':loading}" class="fa" aria-hidden="true"></i></button>
               </div>
             </div>
           </div>
@@ -29,7 +33,7 @@
                       [readonly]="actualizar">
                 <div *ngIf="forma.controls['email'].errors?.pattern"
                 class="form-control-feedback">
-                  Correo no válido
+                <small>Correo no válido</small>
                 </div>
               </div>
             </div>
@@ -44,7 +48,7 @@
                 [readonly]="actualizar">
                 <div *ngIf="forma.controls['identificacion'].errors?.pattern"
                 class="form-control-feedback">
-                  Identificacion no válida
+                <small>Identificacion no válida</small>
                 </div>
               </div>
             </div>
@@ -59,11 +63,11 @@
                 required>
                 <div *ngIf="(forma.controls['nombres'].errors?.required && forma.get('nombres').touched)"
                 class="form-control-feedback">
-                  Los nombres son requeridos
+                <small>Los nombres son requeridos</small>
                 </div>
                 <div *ngIf="forma.controls['nombres'].errors?.minlength"
                 class="form-control-feedback">
-                  Por lo menos 3 caracteres
+                <small>Por lo menos 3 caracteres</small>
                 </div>
               </div>
             </div>
@@ -78,11 +82,11 @@
                 required>
                 <div *ngIf="(forma.controls['apellidos'].errors?.required && forma.get('apellidos').touched)"
                 class="form-control-feedback">
-                  Los apellidos son requeridos
+                  <small>Los apellidos son requeridos</small>
                 </div>
                 <div *ngIf="forma.controls['apellidos'].errors?.minlength"
                 class="form-control-feedback">
-                  Por lo menos 3 caracteres
+                  <small>Por lo menos 3 caracteres</small>
                 </div>
               </div>
             </div>
@@ -97,15 +101,23 @@
                 required>
               </div>
             </div>
-            <div class="form-group row">
-              <label class="col-md-2 form-control-label" for="direccion">Telefono</label>
+            <!-- <div class="form-group row"> -->
+            <div class="form-group row" [ngClass]="{'has-danger': !forma.get('celular').valid && forma.get('celular').touched }">
+              <label class="col-md-2 form-control-label" for="celular">Telefono</label>
               <div class="col-md-8">
                 <input [(ngModel)]="usuario.celular"
                 type="text"
                 formControlName="celular"
                 class="form-control"
-                placeholder="Telefono"
-                required>
+                placeholder="Telefono">
+                <div *ngIf="(forma.controls['celular'].errors?.required && forma.get('celular').touched)"
+                class="form-control-feedback">
+                  <small>Este campo es requerido</small>
+                </div>
+                <div *ngIf="forma.controls['celular'].errors?.minlength || forma.controls['celular'].errors?.pattern"
+                class="form-control-feedback">
+                  <small>Numero telefono no válido</small>
+                </div>
               </div>
             </div>
             <div class="form-group row">
@@ -113,7 +125,7 @@
               <div class="col-md-8">
                 <select [(ngModel)]="usuario.idRol"
                   class="form-control" formControlName="idRol">
-                  <option value="0">Usuario</option>
+                  <option value="2">Usuario</option>
                   <option value="1">Administrador</option>
                 </select>
               </div>
@@ -124,7 +136,7 @@
                 <input [(ngModel)]="usuario.clave"
                        class="form-control"
                        type="password"
-                       placeholder="Password"
+                       placeholder="Contraseña..."
                        formControlName="clave">
               </div>
             </div>
@@ -133,11 +145,11 @@
               <div class="col-md-8">
                 <input class="form-control"
                        type="password"
-                       placeholder="Repetir contraseña"
+                       placeholder="Repetir contraseña..."
                        formControlName="password2">
               <div *ngIf="(!forma.get('password2').valid && forma.get('password2').touched)"
                class="form-control-feedback">
-                 Las constraseñas no coinciden
+               <small>Las constraseñas no coinciden</small>
                </div>
               </div>
             </div>

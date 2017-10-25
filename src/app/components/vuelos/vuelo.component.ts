@@ -38,6 +38,7 @@ export class VueloComponent implements OnInit {
   dataService: CompleterData;
   ciudad: string;
   ciudadesLeidas=false;
+  fecha: any = { date: { year: 2018, month: 10, day: 9 } };
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -84,6 +85,7 @@ export class VueloComponent implements OnInit {
               if (respuesta.exito) {
                 this.vuelo = respuesta.lstVuelos[0];
                 this.forma.setValue(this.vuelo);
+                this.setDate(this.vuelo.fecha);
               }
               else {
                 this.errorMensaje = respuesta.mensaje;
@@ -142,9 +144,12 @@ export class VueloComponent implements OnInit {
     }
   }
 
-  setDate(): void {
+  setDate(fecha = null): void {
         // Set today date using the patchValue function
         let date = new Date();
+        if (fecha) {
+          date = this.toDate(fecha) ;
+        }
         this.forma.patchValue({fecha: {
         date: {
             year: date.getFullYear(),
@@ -152,8 +157,14 @@ export class VueloComponent implements OnInit {
             day: date.getDate()}
         }});
     }
+
+  toDate(dateStr) {
+      let [day, month, year] = dateStr.split("/")
+      return new Date(year, month - 1, day)
+  }
+
   clearDate(): void {
         // Clear the date using the patchValue function
-        this.forma.patchValue({myDate: null});
+        this.forma.patchValue({fecha: null});
     }
 }

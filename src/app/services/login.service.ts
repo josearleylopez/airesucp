@@ -8,7 +8,7 @@ export class LoginService {
 
   // apiURL: string = "http://localhost:8000/api/usuarios";
   usuario;
-  apiURL: string = "http://ucpaires.whelastic.net/sso/rest/msssoadmin";
+  apiURL: string = "http://ucpaires.jl.serv.net.mx/sso/rest/msssoadmin";
 
   constructor(private http: Http, private router: Router) { }
 

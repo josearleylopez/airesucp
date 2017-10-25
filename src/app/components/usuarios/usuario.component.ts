@@ -59,7 +59,7 @@ export class UsuarioComponent implements OnInit {
       'identificacion': new FormControl('', [Validators.required, Validators.pattern("[0-9]+")]),
       'nombres': new FormControl('', [Validators.required, Validators.minLength(3)]),
       'apellidos': new FormControl('', [Validators.required, Validators.minLength(3)]),
-      'celular': new FormControl('', [Validators.minLength(6)]),
+      'celular': new FormControl('', [Validators.required, Validators.minLength(6), Validators.pattern("[0-9]+")]),
       'direccion': new FormControl(''),
       'email': new FormControl('', [Validators.required, Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$")]),
       'clave': new FormControl('', Validators.required),
@@ -88,6 +88,7 @@ export class UsuarioComponent implements OnInit {
 
   agregarNuevo() {
     this.router.navigate(['/usuario', 'nuevo']);
+    this.actualizar = false;
     this.forma.reset();
   }
 
@@ -113,7 +114,15 @@ export class UsuarioComponent implements OnInit {
         error => console.error(error));
     } else {
       //Actualizando usuario
-      this._usuariosService.actualizarUsuario(this.usuario)
+      let aux = {
+        identificacion: this.usuario.identificacion,
+        nombres: this.usuario.nombres,
+        apellidos: this.usuario.apellidos,
+        celular:this.usuario.celular,
+        direccion:this.usuario.direccion,
+        idRol: this.usuario.idRol
+      }
+      this._usuariosService.actualizarUsuario(aux)
         .subscribe(respuesta => {
           if (respuesta.exito) {
             alert(respuesta.mensaje);
