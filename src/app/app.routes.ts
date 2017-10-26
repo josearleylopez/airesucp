@@ -5,6 +5,7 @@ import { UsuarioComponent } from './components/usuarios/usuario.component';
 import { VuelosComponent } from './components/vuelos/vuelos.component';
 import { VueloComponent } from './components/vuelos/vuelo.component';
 import { LoginComponent } from './components/login/login.component';
+import { CompraComponent } from './components/compra/compra.component';
 
 const APP_ROUTES: Routes = [
   { path: 'home', component: HomeComponent },
@@ -13,6 +14,7 @@ const APP_ROUTES: Routes = [
   { path: 'vuelos', component: VuelosComponent },
   { path: 'vuelo/:id', component: VueloComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'compra', component: CompraComponent },
   { path: '**', pathMatch: 'full', redirectTo: 'home' }
 ];
 

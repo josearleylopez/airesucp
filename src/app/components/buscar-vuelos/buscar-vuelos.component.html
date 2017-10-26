@@ -1,4 +1,4 @@
-<div class="animated fadeIn">
+<div *ngIf="!comprar"class="animated fadeIn">
   <div class="row">
     <div class="col-sm-12">
       <form [formGroup]="forma" (ngSubmit)="buscarVuelos()" class="form-horizontal" novalidate="novalidate">
@@ -78,16 +78,16 @@
     </div>
   </div>
   <br>
-  <div class="row">
+  <div *ngIf="resultado" class="row">
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
           <i class="fa fa-plane" aria-hidden="true"></i>
           <strong>Vuelos Encontrados</strong>
         </div>
-        <div class="card-block">
+        <div *ngIf="vuelosIda.length > 0" class="card-block">
           <div class="row">
-            <div class="col-md-5">
+            <div *ngIf="vuelosIda.length > 0" class="col-md-5">
               <div class="card">
                 <div class="card-header">
                   <strong>Ida</strong>
@@ -110,15 +110,43 @@
                 </div>
               </div>
             </div>
+            <div *ngIf="vuelosRegreso.length > 0" class="col-md-5">
+              <div class="card">
+                <div class="card-header">
+                  <strong>Regreso</strong>
+                </div>
+                <div class="card-block">
+                  <div *ngFor="let vuelo of vuelosRegreso" class="list-group-item row">
+                    <div class="col-sm-11">
+                      <small><strong>Fecha: </strong>{{vuelo.fecha}}</small>
+                      <small><strong>Hora: </strong>{{vuelo.hora}}</small>
+                      <small><strong>Origen: </strong>{{vuelo.ciudadOrigen}}</small>
+                      <small><strong>Destino: </strong>{{vuelo.ciudadDestino}}</small>
+                    </div>
+                    <div class="col-sm-1 d-flex justify-content-start">
+                      <label class="custom-control custom-radio">
+                        <input name="radio" type="radio" class="custom-control-input">
+                        <span class="custom-control-indicator"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="col-md-2">
               <div class="card-text">
-                <button class="btn btn-primary" type="button" name="button">Reservar Ahora</button>
+                <button (click)="reservarVuelo()" class="btn btn-primary" type="button" name="button">Reservar Ahora</button>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
+</div>
+<div *ngIf="!comprar">
+  <app-compra
+  [vueloIda]="vueloIda"
+  [vueloRegreso]="vueloRegreso">
+  </app-compra>
 </div>

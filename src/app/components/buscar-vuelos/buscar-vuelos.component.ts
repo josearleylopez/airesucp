@@ -25,28 +25,30 @@ export class BuscarVuelosComponent implements OnInit {
   public dataService: CompleterData;
   public errorMensaje;
   public loading = false;
-  public vuelosIda = [
-    {
-      idVuelo: "0",
-      ciudadOrigen: "Manizales",
-      ciudadDestino: "Santa Marta",
-      fecha: "09/10/2017",
-      hora: "10:07",
-      tiempoEstimado: 1,
-      cantSillas: 35,
-      estado: "PENDIENTE"
-    },
-    {
-      idVuelo: "1",
-      ciudadOrigen: "Armenia",
-      ciudadDestino: "Bogota",
-      fecha: "09/10/2017",
-      hora: "10:07",
-      tiempoEstimado: 1,
-      cantSillas: 35,
-      estado: "ACTIVO"
-    }
-  ]
+  public resultado = false;
+  public comprar = false;
+  public vueloIda = {
+    idVuelo: "0",
+    ciudadOrigen: "Pereira",
+    ciudadDestino: "Cartagena",
+    fecha: "09/10/2017",
+    hora: "10:07",
+    tiempoEstimado: 1,
+    cantSillas: 35,
+    estado: "PENDIENTE"
+  };
+  public vueloRegreso = {
+        idVuelo: "1",
+        ciudadOrigen: "Cartagena",
+        ciudadDestino: "Pereira",
+        fecha: "15/10/2017",
+        hora: "23:00",
+        tiempoEstimado: 1,
+        cantSillas: 35,
+        estado: "ACTIVO"
+      };
+  public vuelosIda = [];
+  public vuelosRegreso = [];
 
   constructor(private _vuelosService: VuelosService,
     private completerService: CompleterService) {
@@ -80,7 +82,50 @@ export class BuscarVuelosComponent implements OnInit {
   }
 
   buscarVuelos() {
+    this.resultado = false;
     this.loading = true;
+    this._vuelosService.buscarVuelos(this.forma.value).subscribe(
+      respuesta=>{
+        // console.log(respuesta);
+        if (respuesta.exito) {
+            this.vuelosIda = respuesta.lstVuelos
+            this.loading = false;
+            this.resultado = true;
+        }
+        else{
+          this.errorMensaje = respuesta.mensaje;
+        }
+      },
+      error => {
+        this.errorMensaje  = <any>error;
+        if (this.errorMensaje!=null) {
+          console.log("Error",this.errorMensaje);
+        }
+      }
+    );
+    this._vuelosService.buscarVuelos(this.forma.value,true).subscribe(
+      respuesta=>{
+        // console.log(respuesta);
+        if (respuesta.exito) {
+            this.vuelosRegreso = respuesta.lstVuelos
+            this.loading = false;
+            this.resultado = true;
+        }
+        else{
+          this.errorMensaje = respuesta.mensaje;
+        }
+      },
+      error => {
+        this.errorMensaje  = <any>error;
+        if (this.errorMensaje!=null) {
+          console.log("Error",this.errorMensaje);
+        }
+      }
+    )
+  }
+
+  reservarVuelo(){
+    this.comprar = true;
   }
 
   setDate(): void {

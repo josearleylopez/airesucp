@@ -1,0 +1,121 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <form [formGroup]="forma" (ngSubmit)="comprarVuelo()" novalidate="novalidate">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa fa-plane" aria-hidden="true"></i>
+            <strong>Reservar Vuelo</strong>
+          </div>
+          <div class="row">
+          <div class="card-block col-md-8">
+            <div class="card">
+              <div class="card-header">
+                <i class="fa fa-user" aria-hidden="true"></i>
+                <strong>Pasajero</strong>
+              </div>
+              <div class="card-block">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="nombres"><small>Nombres</small></label>
+                      <input
+                      type="text"
+                      formControlName="nombres"
+                      class="form-control"
+                      placeholder="Nombres"
+                      required>
+                      <!-- <div *ngIf="!forma.get('ciudadOrigen').valid && forma.get('ciudadOrigen').touched" class="form-control-feedback"><small>Seleccione ciudad</small></div> -->
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="name"><small>Apellidos</small></label>
+                      <input
+                      type="text"
+                      formControlName="apellidos"
+                      class="form-control"
+                      placeholder="Apellidos"
+                      required>
+                      <!-- <div *ngIf="!forma.get('ciudadDestino').valid && forma.get('ciudadDestino').touched" class="form-control-feedback"><small>Seleccione ciudad</small></div> -->
+                    </div>
+                  </div>
+                </div>
+                <!--/.row-->
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label class="form-control-label" for="tipoDocumento"><small>Tipo documento</small></label>
+                        <select
+                        class="form-control" formControlName="tipoDocumento">
+                        <option value="2">Pasaporte</option>
+                        <option value="1">Cedula</option>
+                      </select>
+                  </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="documento"><small>Numero</small></label>
+                      <input
+                      type="text"
+                      formControlName="documento"
+                      class="form-control"
+                      placeholder="Numero documento"
+                      required>
+                      <!-- <div *ngIf="!forma.get('ciudadDestino').valid && forma.get('ciudadDestino').touched" class="form-control-feedback"><small>Seleccione ciudad</small></div> -->
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="form-group">
+                      <label for="numMaletas"><small>No maletas</small></label>
+                      <input type="number" min="1" class="form-control" formControlName="numMaletas">
+                      <!-- <div *ngIf="!forma.get('cantSillas').valid && forma.get('cantSillas').touched" class="form-control-feedback"><small>Valor no valido</small></div> -->
+                    </div>
+                  </div>
+
+                </div>
+                <!--/.row-->
+              </div>
+            </div>
+          </div>
+          <div class="card-block col-md-4">
+            <div class="card">
+              <div class="card-header">
+                <i class="fa fa-user" aria-hidden="true"></i>
+                <strong>Detalle Reserva</strong>
+              </div>
+              <div class="card-block">
+                <small>No Pasajeros</small>
+              </div>
+              <div class="card-text">
+                <div class="card">
+                  <div class="card-header">
+                    <small>Ida</small>
+                  </div>
+                  <div class="card-block">
+                    <small><strong>Fecha: </strong>{{vueloIda.fecha}}</small>
+                    <small><strong>Hora: </strong>{{vueloIda.hora}}</small>
+                    <small><strong>Origen: </strong>{{vueloIda.ciudadOrigen}}</small>
+                    <small><strong>Destino: </strong>{{vueloIda.ciudadDestino}}</small>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header">
+                    <small>Regreso</small>
+                  </div>
+                  <div class="card-block">
+                    <small><strong>Fecha: </strong>{{vueloRegreso.fecha}}</small>
+                    <small><strong>Hora: </strong>{{vueloRegreso.hora}}</small>
+                    <small><strong>Origen: </strong>{{vueloRegreso.ciudadOrigen}}</small>
+                    <small><strong>Destino: </strong>{{vueloRegreso.ciudadDestino}}</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

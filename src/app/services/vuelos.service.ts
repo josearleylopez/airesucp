@@ -59,12 +59,7 @@ export class VuelosService {
     // { year: this.date.getFullYear(), month: this.date.getMonth() + 1, day: this.date.getDate() - 1 }
     // "fecha"="${vuelo.fecha.getDate()}/${vuelo.fecha.getMonth() + 1}/${vuelo.fecha.getFullYear()}",
     // let body = `{"ciudadOrigen":"${vuelo.ciudadOrigen}","ciudadDestino":"${vuelo.ciudadDestino}","fecha":"${vuelo.fecha.formatted}","hora":"${vuelo.hora}","tiempoEstimado":"${vuelo.tiempoEstimado}","cantSillas":"${vuelo.cantSillas}"}`;
-
-
     let body = '{"ciudadOrigen":"'+vuelo.ciudadOrigen+'","ciudadDestino":"'+vuelo.ciudadDestino+'","fecha":"'+vuelo.fecha.formatted+'","hora":"'+vuelo.hora+'","tiempoEstimado":"'+vuelo.tiempoEstimado+'","cantSillas":"'+vuelo.cantSillas+'"}';
-
-
-
     console.log("Objeto a enviar",body)
     // {"ciudadOrigen":"Pereira",
         // "ciudadDestino":"Santa Marta",
@@ -118,6 +113,35 @@ export class VuelosService {
         return res.json();
       })
   }
+
+  buscarVuelos(parametros:any,regreso = false) {
+    let aux;
+    if (regreso) {
+      aux = {
+        ciudadOrigen: parametros.ciudadDestino,
+        ciudadDestino: parametros.ciudadRegreso,
+        fecha: parametros.fechaRegreso.formatted,
+      }
+    }else{
+      aux = {
+        ciudadDestino: parametros.ciudadDestino,
+        ciudadOrigen: parametros.ciudadOrigen,
+        fecha: parametros.fechaSalida.formatted,
+      }
+    }
+    let body = JSON.stringify(aux);
+    console.log("Vuelo a buscar",body);
+    let headers = new Headers({
+      'Content-Type': 'application/json'
+    });
+    let url = `${this.apiURL}/consultar`;
+    return this.http.post(url, body, { headers: headers })
+      .map(res => {
+        console.log(res.json());
+        return res.json();
+      })
+  }
+
 
   consultarCiudades() {
     let headers = new Headers({

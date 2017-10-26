@@ -25,6 +25,8 @@ import { VuelosComponent } from './components/vuelos/vuelos.component';
 import { VueloComponent } from './components/vuelos/vuelo.component';
 import { UsuarioComponent } from './components/usuarios/usuario.component';
 import { BuscarVuelosComponent } from './components/buscar-vuelos/buscar-vuelos.component';
+import { ReservasComponent } from './components/reservas/reservas.component';
+import { CompraComponent } from './components/compra/compra.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { BuscarVuelosComponent } from './components/buscar-vuelos/buscar-vuelos.
     VuelosComponent,
     VueloComponent,
     UsuarioComponent,
-    BuscarVuelosComponent
+    BuscarVuelosComponent,
+    ReservasComponent,
+    CompraComponent
   ],
   imports: [
     BrowserModule,

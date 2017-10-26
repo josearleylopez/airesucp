@@ -9,7 +9,7 @@
             </div>
             <div class="col-md-2 d-flex justify-content-end">
               <div class="btn-group">
-                <button (click)="agregarNuevo()" type="button" class="btn btn-secondary btn-sm"><i class="fa fa-file-o" aria-hidden="true"></i></button>
+                <button (click)="agregarNuevo()" type="button" class="btn btn-secondary"><i class="fa fa-file-o" aria-hidden="true"></i></button>
               </div>
             </div>
           </div>
@@ -35,9 +35,9 @@
                     <div>
                       <button [routerLink]="['/usuario',usuario.identificacion]" type="button" class="btn btn-primary btn-sm"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                     </div>
-                    <div>
+                    <!-- <div>
                       <button (click)="borrarUsuario(usuario)" type="button" class="btn btn-primary btn-sm"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-                    </div>
+                    </div> -->
                   </div>
                 </td>
               </tr>
