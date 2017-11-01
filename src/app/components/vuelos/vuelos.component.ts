@@ -9,6 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class VuelosComponent implements OnInit {
   errorMensaje = null;
+  loading = false;
   vuelos = [
     // {
     //   id:"1",
@@ -33,11 +34,12 @@ export class VuelosComponent implements OnInit {
               private router:Router) { }
 
   ngOnInit() {
+    this.loading = true;
     this._vuelosService.consultarVuelos().subscribe(
       respuesta=>{
-        // console.log(respuesta);
+        this.loading = false;
         if (respuesta.exito) {
-            this.vuelos = respuesta.lstVuelos
+            this.vuelos = respuesta.lstVuelos;
         }
         else{
           this.errorMensaje = respuesta.mensaje;

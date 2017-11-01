@@ -9,35 +9,23 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class UsuariosComponent implements OnInit {
   errorMensaje=null;
-  usuarios = [
-    // {
-    //   id:"1",
-    //   nombres: "Pedro",
-    //   apellidos: "Lotero",
-    //   email: "pedro.lotero@ucp.edu.co",
-    //   role:"Admin"
-    // },
-    // {
-    //   id:"2",
-    //   nombres: "Jose",
-    //   apellidos: "Lopez",
-    //   email: "jose.lopez@ucp.edu.co",
-    //   role:"User"
-    // }
-
-  ]
+  loading = false;
+  usuarios = []
   constructor(private _usuariosService:UsuariosService,
               private router:Router) { }
 
   ngOnInit() {
+    this.loading = true;
     this._usuariosService.consultarUsuarios().subscribe(
       respuesta=>{
         // console.log(respuesta);
         if (respuesta.exito) {
-            this.usuarios = respuesta.lstPersonas
+            this.usuarios = respuesta.lstPersonas;
+            this.loading = false;
         }
         else{
           this.errorMensaje = respuesta.mensaje;
+          this.loading = false;
         }
       },
       error => {

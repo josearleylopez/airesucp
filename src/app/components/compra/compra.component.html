@@ -1,83 +1,92 @@
 <div class="animated fadeIn">
   <div class="row">
     <div class="col-md-12">
-      <form [formGroup]="forma" (ngSubmit)="comprarVuelo()" novalidate="novalidate">
+      <form [formGroup]="pasajerosForm" (ngSubmit)="reservarVuelo()" novalidate="novalidate">
         <div class="card">
           <div class="card-header">
-            <i class="fa fa-plane" aria-hidden="true"></i>
-            <strong>Reservar Vuelo</strong>
-          </div>
-          <div class="row">
-          <div class="card-block col-md-8">
-            <div class="card">
-              <div class="card-header">
-                <i class="fa fa-user" aria-hidden="true"></i>
-                <strong>Pasajero</strong>
+            <div class="row">
+              <div class="col-md-10">
+                <i class="fa fa-plane" aria-hidden="true"></i>
+                <strong>Reservar Vuelo</strong>
               </div>
-              <div class="card-block">
-                <div class="row">
-                  <div class="col-sm-6">
-                    <div class="form-group">
-                      <label for="nombres"><small>Nombres</small></label>
-                      <input
-                      type="text"
-                      formControlName="nombres"
-                      class="form-control"
-                      placeholder="Nombres"
-                      required>
-                      <!-- <div *ngIf="!forma.get('ciudadOrigen').valid && forma.get('ciudadOrigen').touched" class="form-control-feedback"><small>Seleccione ciudad</small></div> -->
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="form-group">
-                      <label for="name"><small>Apellidos</small></label>
-                      <input
-                      type="text"
-                      formControlName="apellidos"
-                      class="form-control"
-                      placeholder="Apellidos"
-                      required>
-                      <!-- <div *ngIf="!forma.get('ciudadDestino').valid && forma.get('ciudadDestino').touched" class="form-control-feedback"><small>Seleccione ciudad</small></div> -->
-                    </div>
-                  </div>
+              <div class="col-md-2 d-flex justify-content-end">
+                <div class="btn-group">
+                  <button (click)="regresarBusqueda($event)" type="button" class="btn btn-secondary"><i class="fa fa-reply" aria-hidden="true"></i></button>
                 </div>
-                <!--/.row-->
-                <div class="row">
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <label class="form-control-label" for="tipoDocumento"><small>Tipo documento</small></label>
-                        <select
-                        class="form-control" formControlName="tipoDocumento">
-                        <option value="2">Pasaporte</option>
-                        <option value="1">Cedula</option>
-                      </select>
-                  </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="form-group">
-                      <label for="documento"><small>Numero</small></label>
-                      <input
-                      type="text"
-                      formControlName="documento"
-                      class="form-control"
-                      placeholder="Numero documento"
-                      required>
-                      <!-- <div *ngIf="!forma.get('ciudadDestino').valid && forma.get('ciudadDestino').touched" class="form-control-feedback"><small>Seleccione ciudad</small></div> -->
-                    </div>
-                  </div>
-                  <div class="col-sm-3">
-                    <div class="form-group">
-                      <label for="numMaletas"><small>No maletas</small></label>
-                      <input type="number" min="1" class="form-control" formControlName="numMaletas">
-                      <!-- <div *ngIf="!forma.get('cantSillas').valid && forma.get('cantSillas').touched" class="form-control-feedback"><small>Valor no valido</small></div> -->
-                    </div>
-                  </div>
-
-                </div>
-                <!--/.row-->
               </div>
             </div>
           </div>
+          <div class="row">
+            <div class="col-md-8" formArrayName="pasajeros">
+              <div *ngFor="let p of pasajeros(numPasajeros).fill(1); let i = index" class="card-block">
+                <div class="card" [formGroupName]="i">
+                  <div class="card-header">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <strong>Pasajero {{i+1}}</strong>
+                  </div>
+                  <div class="card-block">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="form-group" [ngClass]="{'has-danger': !pasajerosForm.controls['pasajeros'].controls[i].controls['nombres'].valid && pasajerosForm.controls['pasajeros'].controls[i].controls['nombres'].touched }">
+                          <label for="nombres"><small>Nombres</small></label>
+                          <input
+                          type="text"
+                          formControlName="nombres"
+                          class="form-control"
+                          placeholder="Nombres"
+                          required>
+                          <div *ngIf="(pasajerosForm.controls['pasajeros'].controls[i].controls['nombres'].errors?.required && pasajerosForm.controls['pasajeros'].controls[i].controls['nombres'].touched)" class="form-control-feedback"><small>Los nombres son requeridos</small></div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="form-group" [ngClass]="{'has-danger': !pasajerosForm.controls['pasajeros'].controls[i].controls['apellidos'].valid && pasajerosForm.controls['pasajeros'].controls[i].controls['apellidos'].touched }">
+                          <label for="name"><small>Apellidos</small></label>
+                          <input
+                          type="text"
+                          formControlName="apellidos"
+                          class="form-control"
+                          placeholder="Apellidos"
+                          required>
+                          <div *ngIf="(pasajerosForm.controls['pasajeros'].controls[i].controls['apellidos'].errors?.required && pasajerosForm.controls['pasajeros'].controls[i].controls['apellidos'].touched)" class="form-control-feedback"><small>Los apellidos son requeridos</small></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <div class="form-group" [ngClass]="{'has-danger': !pasajerosForm.controls['pasajeros'].controls[i].controls['tipoDocumento'].valid && pasajerosForm.controls['pasajeros'].controls[i].controls['tipoDocumento'].touched }">
+                          <label class="form-control-label" for="tipoDocumento"><small>Tipo documento</small></label>
+                          <select
+                          class="form-control" formControlName="tipoDocumento">
+                          <option value="PASAPORTE">Pasaporte</option>
+                          <option value="CEDULA">Cedula</option>
+                        </select>
+                        <div *ngIf="(pasajerosForm.controls['pasajeros'].controls[i].controls['tipoDocumento'].errors?.required && pasajerosForm.controls['pasajeros'].controls[i].controls['tipoDocumento'].touched)" class="form-control-feedback"><small>Tipo requerido</small></div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="form-group" [ngClass]="{'has-danger': !pasajerosForm.controls['pasajeros'].controls[i].controls['documento'].valid && pasajerosForm.controls['pasajeros'].controls[i].controls['documento'].touched }">
+                        <label for="documento"><small>Numero</small></label>
+                        <input
+                        type="text"
+                        formControlName="documento"
+                        class="form-control"
+                        placeholder="Numero documento"
+                        required>
+                        <div *ngIf="(pasajerosForm.controls['pasajeros'].controls[i].controls['documento'].errors?.required && pasajerosForm.controls['pasajeros'].controls[i].controls['documento'].touched)" class="form-control-feedback"><small>Número identificacion requerida</small></div>
+                      </div>
+                    </div>
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                        <label for="numMaletas"><small>No maletas</small></label>
+                        <input type="number" min="1" class="form-control" formControlName="numMaletas">
+                        <!-- <div *ngIf="!forma.get('cantSillas').valid && forma.get('cantSillas').touched" class="form-control-feedback"><small>Valor no valido</small></div> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
           <div class="card-block col-md-4">
             <div class="card">
               <div class="card-header">
@@ -85,12 +94,12 @@
                 <strong>Detalle Reserva</strong>
               </div>
               <div class="card-block">
-                <small>No Pasajeros</small>
+                <small><strong>No Pasajeros: </strong>{{numPasajeros}}</small>
               </div>
               <div class="card-text">
-                <div class="card">
+                <div *ngIf="!objetoVacio(vueloIda)" class="card">
                   <div class="card-header">
-                    <small>Ida</small>
+                    <small>Vuelo Ida</small>
                   </div>
                   <div class="card-block">
                     <small><strong>Fecha: </strong>{{vueloIda.fecha}}</small>
@@ -99,9 +108,9 @@
                     <small><strong>Destino: </strong>{{vueloIda.ciudadDestino}}</small>
                   </div>
                 </div>
-                <div class="card">
+                <div *ngIf="!objetoVacio(vueloRegreso)" class="card">
                   <div class="card-header">
-                    <small>Regreso</small>
+                    <small>Vuelo Regreso</small>
                   </div>
                   <div class="card-block">
                     <small><strong>Fecha: </strong>{{vueloRegreso.fecha}}</small>
@@ -111,6 +120,97 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="card-block col-md-8">
+            <div class="card">
+              <div class="card-header">
+                <i class="fa fa-file-text" aria-hidden="true"></i>
+                <strong>Datos Facturacion</strong>
+              </div>
+              <div class="card-block">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group" [ngClass]="{'has-danger': !pasajerosForm.controls['nombresUsuario'].valid && pasajerosForm.controls['nombresUsuario'].touched }">
+                      <label for="nombres"><small>Nombres</small></label>
+                      <input
+                      type="text"
+                      formControlName="nombresUsuario"
+                      class="form-control"
+                      placeholder="Nombres"
+                      readonly="true">
+                      <div *ngIf="(pasajerosForm.controls['nombresUsuario'].errors?.required && pasajerosForm.controls['nombresUsuario'].touched)" class="form-control-feedback"><small>Los nombres son requeridos</small></div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group" [ngClass]="{'has-danger': !pasajerosForm.controls['apellidosUsuario'].valid && pasajerosForm.controls['apellidosUsuario'].touched }">
+                      <label for="name"><small>Apellidos</small></label>
+                      <input
+                      type="text"
+                      formControlName="apellidosUsuario"
+                      class="form-control"
+                      placeholder="Apellidos"
+                      readonly="true">
+                      <div *ngIf="(pasajerosForm.controls['apellidosUsuario'].errors?.required && pasajerosForm.controls['apellidosUsuario'].touched)" class="form-control-feedback"><small>Los apellidos son requeridos</small></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group" [ngClass]="{'has-danger': !pasajerosForm.controls['identificacionUsuario'].valid && pasajerosForm.controls['identificacionUsuario'].touched }">
+                      <label for="documento"><small>Identificacion</small></label>
+                      <input
+                      type="text"
+                      formControlName="identificacionUsuario"
+                      class="form-control"
+                      placeholder="Numero documento"
+                      readonly="true">
+                      <div *ngIf="(pasajerosForm.controls['identificacionUsuario'].errors?.required && pasajerosForm.controls['identificacionUsuario'].touched)" class="form-control-feedback"><small>Número identificacion requerida</small></div>
+                    </div>
+                  </div>
+                <div class="col-sm-6">
+                  <div class="form-group" [ngClass]="{'has-danger': !pasajerosForm.controls['pasaporteUsuario'].valid && pasajerosForm.controls['pasaporteUsuario'].touched }">
+                    <label for="documento"><small>Pasaporte</small></label>
+                    <input
+                    type="text"
+                    formControlName="pasaporteUsuario"
+                    class="form-control"
+                    placeholder="Numero pasaporte"
+                    required>
+                    <div *ngIf="(pasajerosForm.controls['pasaporteUsuario'].errors?.required && pasajerosForm.controls['pasaporteUsuario'].touched)" class="form-control-feedback"><small>Número pasaporte requerido</small></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group" [ngClass]="{'has-danger': !pasajerosForm.controls['telefonoUsuario'].valid && pasajerosForm.controls['telefonoUsuario'].touched }">
+                    <label class="form-control-label" for="tipoDocumento"><small>Telefono</small></label>
+                    <input
+                    type="text"
+                    formControlName="telefonoUsuario"
+                    class="form-control"
+                    placeholder="Numero telefonico"
+                    required>
+                  <div *ngIf="(pasajerosForm.controls['telefonoUsuario'].errors?.required && pasajerosForm.controls['telefonoUsuario'].touched)" class="form-control-feedback"><small>Telefono requerido</small></div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group" [ngClass]="{'has-danger': !pasajerosForm.controls['direccionUsuario'].valid && pasajerosForm.controls['direccionUsuario'].touched }">
+                  <label for="documento"><small>Direccion</small></label>
+                  <input
+                  type="text"
+                  formControlName="direccionUsuario"
+                  class="form-control"
+                  placeholder="Numero documento"
+                  required>
+                  <div *ngIf="(pasajerosForm.controls['direccionUsuario'].errors?.required && pasajerosForm.controls['direccionUsuario'].touched)" class="form-control-feedback"><small>Direccion requerida</small></div>
+                </div>
+              </div>
+            </div>
+              <div class="row justify-content-end">
+                  <button [disabled]="!pasajerosForm.valid" type="submit" class="btn btn-success" name="comprar">Comprar</button>
+              </div>
+            </div>
             </div>
           </div>
           </div>

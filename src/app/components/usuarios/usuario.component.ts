@@ -93,10 +93,6 @@ export class UsuarioComponent implements OnInit {
   }
 
   guardarFormulario(){
-    console.log("Usuario",this.usuario);
-    console.log("Valor forma",this.forma.value);
-    console.log("Forma",this.forma);
-
     this.loading = true;
     if (this.id == "nuevo") {
       //Insertando usuario

@@ -17,6 +17,9 @@
       <li *ngIf="login.autenticado() && login.permiso('vuelos')" class="nav-item" routerLinkActive="active">
         <a class="nav-link" [routerLink]="['vuelos']">Vuelos</a>
       </li>
+      <li *ngIf="login.autenticado() && login.permiso('reservas')" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['reservas']">Reservas</a>
+      </li>
     </ul>
     <ul *ngIf="login.autenticado()" class="navbar-nav navbar-right">
       <li class="nav-item dropdown" dropdown>

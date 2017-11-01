@@ -59,7 +59,6 @@ export class VueloComponent implements OnInit {
 
     this._vuelosService.consultarCiudades()
       .subscribe(respuesta => {
-        console.log("Respuesta",respuesta)
         this.ciudades = respuesta;
         this.dataService = completerService.local(this.ciudades, 'nombreCiudad', 'nombreCiudad');
       },
@@ -75,7 +74,6 @@ export class VueloComponent implements OnInit {
 
     this.activatedRoute.params
       .subscribe(parametros => {
-        console.log(parametros);
         this.id = parametros['id'];
         if (this.id !== "nuevo") {
           this.actualizar = true;
@@ -145,7 +143,6 @@ export class VueloComponent implements OnInit {
   }
 
   setDate(fecha = null): void {
-        // Set today date using the patchValue function
         let date = new Date();
         if (fecha) {
           date = this.toDate(fecha) ;
@@ -164,7 +161,6 @@ export class VueloComponent implements OnInit {
   }
 
   clearDate(): void {
-        // Clear the date using the patchValue function
         this.forma.patchValue({fecha: null});
     }
 }

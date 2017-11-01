@@ -43,19 +43,16 @@
               </tr>
             </tbody>
           </table>
-          <!-- <ul class="pagination justify-content-center">
-            <li class="page-item"><a class="page-link" href="#"><small>Anterior</small></a></li>
-            <li class="page-item active">
-              <a class="page-link" href="#">1</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">4</a></li>
-            <li class="page-item"><a class="page-link" href="#"><small>Siguiente</small></a></li>
-          </ul> -->
         </div>
-        <div class="card-footer">
-
+        <div *ngIf="loading" class="card-block">
+          <div class="col-md-12 alert alert-info" role="alert">
+            <strong>Cargando....</strong> Por favor espere.
+          </div>
+        </div>
+        <div *ngIf="errorMensaje" class="card-block">
+          <div class="col-md-12 alert alert-danger" role="alert">
+            <strong>Opps!! </strong> {{errorMensaje}}
+          </div>
         </div>
       </div>
     </div>

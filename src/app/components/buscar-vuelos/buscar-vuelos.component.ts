@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {IMyDpOptions} from 'mydatepicker';
+import { IMyDpOptions } from 'mydatepicker';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { VuelosService} from '../../services/vuelos.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-buscar-vuelos',
@@ -19,40 +20,25 @@ export class BuscarVuelosComponent implements OnInit {
     todayBtnTxt: 'Hoy',
     disableUntil: { year: this.date.getFullYear(), month: this.date.getMonth() + 1, day: this.date.getDate() - 1 }
   };
-  // public fechaSalida: any = { date: { year: 2017, month: 10, day: 13 } };
   public forma: FormGroup;
   private ciudades = [];
   public dataService: CompleterData;
   public errorMensaje;
   public loading = false;
   public resultado = false;
+  public resultadoRegreso = false;
   public comprar = false;
-  public vueloIda = {
-    idVuelo: "0",
-    ciudadOrigen: "Pereira",
-    ciudadDestino: "Cartagena",
-    fecha: "09/10/2017",
-    hora: "10:07",
-    tiempoEstimado: 1,
-    cantSillas: 35,
-    estado: "PENDIENTE"
-  };
-  public vueloRegreso = {
-        idVuelo: "1",
-        ciudadOrigen: "Cartagena",
-        ciudadDestino: "Pereira",
-        fecha: "15/10/2017",
-        hora: "23:00",
-        tiempoEstimado: 1,
-        cantSillas: 35,
-        estado: "ACTIVO"
-      };
+  public vueloIda = {};
+  public vueloRegreso = {};
   public vuelosIda = [];
+  public numPasajeros = 0;
   public vuelosRegreso = [];
 
   constructor(private _vuelosService: VuelosService,
-    private completerService: CompleterService) {
+              private completerService: CompleterService,
+              private router:Router) {
     this.forma = new FormGroup({
+      'tipoVuelo': new FormControl('1'),
       'ciudadOrigen': new FormControl('', [Validators.required]),
       'ciudadDestino': new FormControl('', [Validators.required]),
       'fechaSalida': new FormControl(null, [Validators.required]),
@@ -61,7 +47,6 @@ export class BuscarVuelosComponent implements OnInit {
     });
     this._vuelosService.consultarCiudades()
       .subscribe(respuesta => {
-        console.log("Respuesta", respuesta)
         this.ciudades = respuesta;
         this.dataService = completerService.local(this.ciudades, 'nombreCiudad', 'nombreCiudad');
       },
@@ -70,8 +55,6 @@ export class BuscarVuelosComponent implements OnInit {
         this.dataService = completerService.local(this.ciudades, 'nombreCiudad', 'nombreCiudad');
         this.errorMensaje = <any>error;
         if (this.errorMensaje != null) {
-          console.log(this.errorMensaje);
-          // alert("Lista de ciudades no leída");
         }
       });
 
@@ -79,17 +62,39 @@ export class BuscarVuelosComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.resultado = false;
+    this.forma.patchValue({fechaSalida: {
+    date: {
+        year: this.date.getFullYear(),
+        month: this.date.getMonth() + 1,
+        day: this.date.getDate()}
+    }});
+    this.forma.patchValue({fechaRegreso: {
+    date: {
+        year: this.date.getFullYear(),
+        month: this.date.getMonth() + 1,
+        day: this.date.getDate()}
+    }});
   }
 
   buscarVuelos() {
-    this.resultado = false;
+    // Busca vuelos segun parametros dados en el formulario
+    if (this.forma.get('tipoVuelo').value == 1) {
+      if (this.fechaMayor(this.forma.get('fechaSalida').value.date,this.forma.get('fechaRegreso').value.date)) {
+        alert("La fecha de salida debe ser menor a la fecha de regreso");
+        return
+      }
+    }
+    this.vueloIda = {};
+    this.vuelosIda = [];
+    this.vueloRegreso = {};
+    this.vuelosRegreso =[];
     this.loading = true;
     this._vuelosService.buscarVuelos(this.forma.value).subscribe(
       respuesta=>{
-        // console.log(respuesta);
+        this.loading = false;
         if (respuesta.exito) {
             this.vuelosIda = respuesta.lstVuelos
-            this.loading = false;
             this.resultado = true;
         }
         else{
@@ -103,33 +108,77 @@ export class BuscarVuelosComponent implements OnInit {
         }
       }
     );
-    this._vuelosService.buscarVuelos(this.forma.value,true).subscribe(
-      respuesta=>{
-        // console.log(respuesta);
-        if (respuesta.exito) {
+    if (this.forma.get('tipoVuelo').value == 1) {
+      this._vuelosService.buscarVuelos(this.forma.value,true).subscribe(
+        respuesta=>{
+          this.loading = false;
+          if (respuesta.exito) {
             this.vuelosRegreso = respuesta.lstVuelos
-            this.loading = false;
             this.resultado = true;
+          }
+          else{
+            this.errorMensaje = respuesta.mensaje;
+          }
+        },
+        error => {
+          this.errorMensaje  = <any>error;
+          if (this.errorMensaje!=null) {
+            console.log("Error",this.errorMensaje);
+          }
         }
-        else{
-          this.errorMensaje = respuesta.mensaje;
-        }
-      },
-      error => {
-        this.errorMensaje  = <any>error;
-        if (this.errorMensaje!=null) {
-          console.log("Error",this.errorMensaje);
-        }
-      }
-    )
+      )
+    }
   }
 
   reservarVuelo(){
+    // Verifica valores de usuarios y vuelo y redirige al componente de compras
+    if (localStorage.getItem('usuario') == null){
+      this.router.navigate(['/login']);
+    }
+    if (this.objetoVacio(this.vueloIda) && this.vuelosIda.length > 0) {
+      alert("Debe seleccionar vuelo de ida");
+      return
+    }
+    if (this.forma.get('tipoVuelo').value == 1 && this.objetoVacio(this.vueloRegreso) && this.vuelosRegreso.length > 0){
+      alert("Debe seleccionar vuelo regreso");
+      return
+    }
+    this.numPasajeros = this.forma.get('cantSillas').value;
     this.comprar = true;
   }
 
+  objetoVacio(obj) {
+    // Verifica si un objeto esta vacio
+      return Object.keys(obj).length === 0;
+  }
+
+  regresarBusqueda(event){
+    // Funcion para regresar al componente de busqueda de vuelos
+    this.comprar = event.estado;
+  }
+
+  fechaMayor(fechaIni,fechaFin){
+    // Comprueba que la fecha inicial de vuelo sea menor que la de regreso
+    let f1 = new Date(fechaIni.year, fechaIni.month,fechaIni.day);
+    let f2 = new Date(fechaFin.year, fechaFin.month,fechaFin.day);
+    if(f1 > f2){
+      return true;
+    }
+    return false;
+  }
+
+  selVueloIda(vuelo){
+    // Selecciona vuelo para luego ser cargado en el componente de compra
+    this.vueloIda = vuelo;
+  }
+
+  selVueloRegreso(vuelo){
+    // Selecciona vuelo para luego ser cargado en el componente de compra
+    this.vueloRegreso=vuelo;
+  }
+
   setDate(): void {
-    // Set today date using the patchValue function
+    // Carga fecha en el formulario
     let date = new Date();
     this.forma.patchValue({
       fecha: {
@@ -142,7 +191,7 @@ export class BuscarVuelosComponent implements OnInit {
     });
   }
   clearDate(): void {
-    // Clear the date using the patchValue function
+    // Borra fecha en formulario
     this.forma.patchValue({ myDate: null });
   }
 }

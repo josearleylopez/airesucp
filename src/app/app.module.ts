@@ -14,6 +14,7 @@ import { LoginService } from './services/login.service';
 import { AuthGuardService } from './services/auth-guard.service';
 import { UsuariosService } from './services/usuarios.service';
 import { VuelosService } from './services/vuelos.service';
+import { ReservasService } from './services/reservas.service';
 
 //Componentes
 import { AppComponent } from './app.component';
@@ -55,7 +56,8 @@ import { CompraComponent } from './components/compra/compra.component';
     LoginService,
     AuthGuardService,
     UsuariosService,
-    VuelosService
+    VuelosService,
+    ReservasService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,3 +1,58 @@
-<p>
-  reservas works!
-</p>
+<div class="animated fadeIn">
+<div class="row">
+  <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+              <div class="col-md-10">
+                <i class="fa fa-plane" aria-hidden="true"></i><strong> Reservas </strong>
+              </div>
+          </div>
+        </div>
+        <div class="card-block">
+          <table class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th>No Reserva</th>
+                <th>Descripcion</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Estado</th>
+                <th>Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let reserva of reservas">
+                <td>{{reserva.idVuelo}}</td>
+                <td>{{reserva.descVuelo}}</td>
+                <td>{{reserva.fechaVenta}}</td>
+                <td>{{reserva.horaVenta}}</td>
+                <td>{{reserva.estado}}</td>
+                <td>
+                  <div class="d-flex justify-content-end">
+                    <div>
+                      <button [routerLink]="['/reserva',reserva.idVuelo]" type="button" class="btn btn-primary btn-sm"><i class="fa fa-info-circle" aria-hidden="true"></i></button>
+                    </div>
+                    <div>
+                      <button *ngIf="reserva.estado != 'CONFIRMADO'"(click)="confirmarReserva(reserva.idVuelo)" type="button" class="btn btn-success btn-sm"><i [ngClass]="{'fa-check-circle':!reservando, 'fa-refresh fa-spin':reservando}" class="fa" aria-hidden="true"></i></button>                      
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="loading" class="card-block">
+          <div class="col-md-12 alert alert-info" role="alert">
+            <strong>Cargando....</strong> Por favor espere.
+          </div>
+        </div>
+        <div *ngIf="errorMensaje" class="card-block">
+          <div class="col-md-12 alert alert-danger" role="alert">
+            <strong>Opps!! </strong> {{errorMensaje}}
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+</div>

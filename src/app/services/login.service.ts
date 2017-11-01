@@ -5,9 +5,8 @@ import 'rxjs/Rx'
 
 @Injectable()
 export class LoginService {
-
-  // apiURL: string = "http://localhost:8000/api/usuarios";
   usuario;
+  persona;
   apiURL: string = "http://ucpaires.jl.serv.net.mx/sso/rest/msssoadmin";
 
   constructor(private http: Http, private router: Router) { }
@@ -41,9 +40,15 @@ export class LoginService {
     return JSON.parse(localStorage.getItem('usuario'));
   }
 
+  public getPersonaStorage() {
+    return JSON.parse(localStorage.getItem('persona'));
+  }
+
+
   public autenticado() {
     if (localStorage.getItem('usuario') != null) {
       this.usuario = this.getUsuarioStorage();
+      this.persona = this.getPersonaStorage();
       return true;
     }
     return false;
@@ -62,6 +67,9 @@ export class LoginService {
           case 'vuelos': {
             return false;
           }
+          case 'reservas': {
+            return true;
+          }
           default: {
             return true;
           }
@@ -74,5 +82,6 @@ export class LoginService {
   public logout() {
     this.router.navigate(['home']);
     localStorage.removeItem('usuario');
+    localStorage.removeItem('persona');
   }
 }

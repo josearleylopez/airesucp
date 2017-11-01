@@ -56,16 +56,7 @@ export class VuelosService {
       cantSillas: vuelo.cantSillas
     }
     //let body = JSON.stringify(aux);
-    // { year: this.date.getFullYear(), month: this.date.getMonth() + 1, day: this.date.getDate() - 1 }
-    // "fecha"="${vuelo.fecha.getDate()}/${vuelo.fecha.getMonth() + 1}/${vuelo.fecha.getFullYear()}",
-    // let body = `{"ciudadOrigen":"${vuelo.ciudadOrigen}","ciudadDestino":"${vuelo.ciudadDestino}","fecha":"${vuelo.fecha.formatted}","hora":"${vuelo.hora}","tiempoEstimado":"${vuelo.tiempoEstimado}","cantSillas":"${vuelo.cantSillas}"}`;
     let body = '{"ciudadOrigen":"'+vuelo.ciudadOrigen+'","ciudadDestino":"'+vuelo.ciudadDestino+'","fecha":"'+vuelo.fecha.formatted+'","hora":"'+vuelo.hora+'","tiempoEstimado":"'+vuelo.tiempoEstimado+'","cantSillas":"'+vuelo.cantSillas+'"}';
-    console.log("Objeto a enviar",body)
-    // {"ciudadOrigen":"Pereira",
-        // "ciudadDestino":"Santa Marta",
-        // "fecha":"13/10/2017",
-        // "hora":"10:00",
-        // "tiempoEstimado":55,"cantSillas":105}
     let headers = new Headers({
       'Content-Type': 'application/json'
     });

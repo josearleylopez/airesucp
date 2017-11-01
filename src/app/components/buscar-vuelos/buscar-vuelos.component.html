@@ -8,16 +8,16 @@
             <strong>Buscar Vuelos</strong>
           </div>
           <div class="card-block">
-            <!-- <div class="form-group row">
+            <div class="form-group row">
               <div class="col-md-6">
                 <label class="radio-inline" for="inline-radio1">
-                  <input type="radio" id="idaVuelta" name="tipoVuelo" value="1"> Ida y Vuelta
+                  <input type="radio" formControlName="tipoVuelo" value="1"> Ida y Vuelta
                 </label>
                 <label class="radio-inline" for="inline-radio2">
-                  <input type="radio" id="ida" name="tipoVuelo" value="0" checked> Solo ida
+                  <input type="radio" formControlName="tipoVuelo" value="0" checked> Solo ida
                 </label>
               </div>
-            </div> -->
+            </div>
             <div class="row">
               <div class="col-sm-6">
                 <div class="form-group" [ngClass]="{'has-danger': !forma.get('ciudadOrigen').valid && forma.get('ciudadOrigen').touched }">
@@ -46,7 +46,7 @@
                   <div *ngIf="!forma.get('fechaSalida').valid && forma.get('fechaSalida').touched" class="form-control-feedback"><small>Fecha no valida</small></div>
                 </div>
               </div>
-              <div class="col-sm-4">
+              <div *ngIf="forma.get('tipoVuelo').value == 1" class="col-sm-4">
                 <div class="form-group" [ngClass]="{'has-danger': !forma.get('fechaRegreso').valid && forma.get('fechaRegreso').touched }">
                   <label for="fechaSalida">Regreso</label>
                   <my-date-picker name="fechaRegreso" [options]="myDatePickerOptions" formControlName="fechaRegreso">
@@ -71,21 +71,25 @@
               </button>
               </div>
             </div>
-            <!--/.row-->
           </div>
+            <div *ngIf="(vuelosIda.length == 0 && vuelosRegreso.length == 0) && resultado" class="card-block">
+              <div class="col-md-12 alert alert-danger" role="alert">
+                <strong>Lo sentimos!</strong> No encontramos vuelos para las fechas indicadas.
+              </div>
+            </div>
         </div>
       </form>
     </div>
   </div>
   <br>
-  <div *ngIf="resultado" class="row">
+  <div *ngIf="vuelosIda.length > 0 || vuelosRegreso.length > 0" class="row">
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
           <i class="fa fa-plane" aria-hidden="true"></i>
           <strong>Vuelos Encontrados</strong>
         </div>
-        <div *ngIf="vuelosIda.length > 0" class="card-block">
+        <div class="card-block">
           <div class="row">
             <div *ngIf="vuelosIda.length > 0" class="col-md-5">
               <div class="card">
@@ -102,7 +106,7 @@
                     </div>
                     <div class="col-sm-1 d-flex justify-content-start">
                       <label class="custom-control custom-radio">
-                        <input name="radio" type="radio" class="custom-control-input">
+                        <input name="radioIda" type="radio" (click)="selVueloIda(vuelo)" class="custom-control-input">
                         <span class="custom-control-indicator"></span>
                       </label>
                     </div>
@@ -125,7 +129,7 @@
                     </div>
                     <div class="col-sm-1 d-flex justify-content-start">
                       <label class="custom-control custom-radio">
-                        <input name="radio" type="radio" class="custom-control-input">
+                        <input name="radioRegreso" type="radio" (click)="selVueloRegreso(vuelo)" class="custom-control-input">
                         <span class="custom-control-indicator"></span>
                       </label>
                     </div>
@@ -144,9 +148,11 @@
     </div>
   </div>
 </div>
-<div *ngIf="!comprar">
+<div *ngIf="comprar">
   <app-compra
   [vueloIda]="vueloIda"
-  [vueloRegreso]="vueloRegreso">
+  [vueloRegreso]="vueloRegreso"
+  [numPasajeros]="numPasajeros"
+  (regresaBusqueda)="regresarBusqueda($event)">
   </app-compra>
 </div>
